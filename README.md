@@ -37,6 +37,5 @@ A API estará disponível em [http://localhost:8000](http://localhost:8000).
 
 - O container usa GraalPy (GraalVM Python) para rodar FastAPI sem dependências nativas C.
 - O comando de entrada força o uso de `uvicorn` puro (`--http h11 --loop asyncio`).
-- Para builds AOT (native-image), veja o arquivo `Containerfile.aot`.
 
 ---
