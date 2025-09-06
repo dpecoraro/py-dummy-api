@@ -1,6 +1,6 @@
 # FastAPI + GraalPy Demo
 
-Este projeto demonstra uma API FastAPI/Python rodando sobre o GraalVM Python (GraalPy), pronta para ser executada em container.
+Demonstração de uma API FastAPI/Python rodando sobre GraalVM Python (GraalPy), com suporte a execução em container (JIT ou AOT), focada em compatibilidade, performance e portabilidade sem dependências nativas C.
 
 ## Pré-requisitos
 
