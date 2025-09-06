@@ -1,0 +1,27 @@
+# Containerfile
+FROM --platform=linux/arm64 ghcr.io/graalvm/graalpy-community:24
+
+# binário do graalpy nessa imagem
+ENV GRAALPY=/opt/graalpy-*/bin/graalpy
+ENV APP_MODULE=main:app
+
+# garante pip (algumas tags vêm sem)
+RUN $GRAALPY -m ensurepip --upgrade || \
+    (curl -fsSL https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py && \
+     $GRAALPY /tmp/get-pip.py && rm -f /tmp/get-pip.py)
+
+WORKDIR /app
+COPY requirements.txt ./
+# evite C-extensions (pydantic v2/uvloop/httptools)
+RUN $GRAALPY -m pip install --upgrade pip && \
+    $GRAALPY -m pip install --prefer-binary \
+      --extra-index-url https://www.graalvm.org/python/wheels/ \
+      -r requirements.txt
+
+
+COPY . .
+EXPOSE 8000
+
+# Uvicorn com asyncio + h11; desliga lifespan p/ evitar issues antigos
+CMD ["sh","-lc","$GRAALPY -m uvicorn $APP_MODULE --host 0.0.0.0 --port 8000 --http h11 --loop asyncio --lifespan off"]
+
